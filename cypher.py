@@ -1,30 +1,48 @@
-def verify_card_number(card_number):
-    sum_of_odd_digits = 0
-    card_number_reversed = card_number[::-1]
-    odd_digits = card_number_reversed[::2]
-
-    for digit in odd_digits:
-        sum_of_odd_digits += int(digit)
-
-    sum_of_even_digits = 0
-    even_digits = card_number_reversed[1::2]
-    for digit in even_digits:
-        number = int(digit) * 2
-        if number >= 10:
-            number = (number // 10) + (number % 10)
-        sum_of_even_digits += number
-    total = sum_of_odd_digits + sum_of_even_digits
-    print(total)
-    return total % 10 == 0
+def add_expense(expenses, amount, category):
+    expenses.append({'amount': amount, 'category': category})
+    
+def print_expenses(expenses):
+    for expense in expenses:
+        print(f'Amount: {expense["amount"]}, Category: {expense["category"]}')
+    
+def total_expenses(expenses):
+    return sum(map(lambda expense: expense['amount'], expenses))
+    
+def filter_expenses_by_category(expenses, category):
+    return filter(lambda expense: expense['category'] == category, expenses)
+    
 
 def main():
-    card_number = '4111-1111-4555-1141'
-    card_translation = str.maketrans({'-': '', ' ': ''})
-    translated_card_number = card_number.translate(card_translation)
+    expenses = []
+    while True:
+        print('\nExpense Tracker')
+        print('1. Add an expense')
+        print('2. List all expenses')
+        print('3. Show total expenses')
+        print('4. Filter expenses by category')
+        print('5. Exit')
+       
+        choice = input('Enter your choice: ')
 
-    if verify_card_number(translated_card_number):
-        print('VALID!')
-    else:
-        print('INVALID!')
+        if choice == '1':
+            amount = float(input('Enter amount: '))
+            category = input('Enter category: ')
+            add_expense(expenses, amount, category)
 
-main()
+        elif choice == '2':
+            print('\nAll Expenses:')
+            print_expenses(expenses)
+    
+        elif choice == '3':
+            print('\nTotal Expenses: ', total_expenses(expenses))
+    
+        elif choice == '4':
+            category = input('Enter category to filter: ')
+            print(f'\nExpenses for {category}:')
+            expenses_from_category = filter_expenses_by_category(expenses, category)
+            print_expenses(expenses_from_category)
+    
+        elif choice == '5':
+            print('Exiting the program.')
+            break
+
